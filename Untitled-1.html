@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI RGB Classifier</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    
+    <style>
+        :root {
+            --rgb-gradient: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Kanit', sans-serif;
+            background-color: #0b0e14;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* RGB Border Animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: var(--rgb-gradient);
+            background-size: 400%;
+            z-index: 2000;
+            animation: rgb-bar 20s linear infinite;
+        }
+
+        @keyframes rgb-bar {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 5px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav a {
+            color: #aaa;
+            text-decoration: none;
+            margin: 0 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: #00ffd5;
+            text-shadow: 0 0 10px #00ffd5;
+        }
+
+        /* Content Center */
+        .page {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background: radial-gradient(circle at center, #1a1f29 0%, #0b0e14 100%);
+        }
+
+        .active { display: flex; }
+
+        /* Card Style */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #00ffd5, #002bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glowing Button */
+        button {
+            background: transparent;
+            color: white;
+            border: 2px solid #00ffd5;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 213, 0.2);
+        }
+
+        button:hover {
+            background: #00ffd5;
+            color: black;
+            box-shadow: 0 0 30px rgba(0, 255, 213, 0.6);
+        }
+
+        /* Image Display */
+        #output-image {
+            max-width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 2px solid rgba(0, 255, 213, 0.3);
+            display: none;
+        }
+
+        /* Result Labels */
+        .result-item {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 10px 0;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            border-left: 4px solid #00ffd5;
+        }
+
+        input[type="file"] {
+            margin-top: 20px;
+            color: #888;
+        }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('check')">Check</a>
+        <a onclick="showPage('about')">About Us</a>
+    </nav>
+
+    <section id="home" class="page active">
+        <div class="card">
+            <h1>AI VISION</h1>
+            <p style="color: #888;">สัมผัสประสบการณ์การจำแนกภาพด้วยปัญญาประดิษฐ์</p>
+            <button onclick="showPage('check')">GET STARTED</button>
+        </div>
+    </section>
+
+    <section id="check" class="page">
+        <div class="card">
+            <h2 style="color: #00ffd5;">SCANNER</h2>
+            <p>กรุณาเลือกไฟล์ภาพเพื่อทำการวิเคราะห์</p>
+            
+            <input type="file" id="file-input" accept="image/*" onchange="loadFile(event)" style="display:none;">
+            <button onclick="document.getElementById('file-input').click()">UPLOAD IMAGE</button>
+            
+            <img id="output-image" />
+            <div id="label-container" style="margin-top: 20px;"></div>
+        </div>
+    </section>
+
+    <section id="about" class="page">
+        <div class="card">
+            <h1>ABOUT US</h1>
+            <p>Project: Image Classification App</p>
+            <p style="color: #888;">Powered by TensorFlow.js & Teachable Machine</p>
+            <div style="margin-top: 20px; color: #00ffd5;">RGB Edition v2.0</div>
+        </div>
+    </section>
+
+    <script>
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        const URL = "https://teachablemachine.withgoogle.com/models/z1MI7qRTI/";
+        let model, maxPredictions;
+
+        async function initModel() {
+            if (!model) {
+                const modelURL = URL + "model.json";
+                const metadataURL = URL + "metadata.json";
+                model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+            }
+        }
+
+        async function loadFile(event) {
+            await initModel();
+            const image = document.getElementById('output-image');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    image.src = reader.result;
+                    image.style.display = "block";
+                    image.onload = async function() {
+                        await predict(image);
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function predict(imageElement) {
+            const prediction = await model.predict(imageElement);
+            const container = document.getElementById("label-container");
+            container.innerHTML = "";
+            
+            prediction.forEach(p => {
+                const div = document.createElement("div");
+                div.className = "result-item";
+                const percent = (p.probability * 100).toFixed(0);
+                div.innerHTML = `
+                    <span>${p.className}</span>
+                    <span style="color:#00ffd5; font-weight:bold;">${percent}%</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
