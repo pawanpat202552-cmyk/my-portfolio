@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | นักเรียนมัธยมปลาย</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        section {
+            padding: 50px 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #4e54c8;
+        }
+
+        .about, .education, .skills, .activities, .contact {
+            margin-bottom: 40px;
+        }
+
+        .skills ul, .activities ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            list-style: none;
+        }
+
+        .skills li, .activities li {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+<img width="180px"src="https://thethaiger.com/th/wp-content/uploads/2025/12/594963086_1375335617269806_7515055704741260771_n.jpg" alt="profile">
+    <h1>น.ส.ปวันพัสตร์  บุญเตี่ยม</h1>
+    <p>นักเรียนชั้นมัธยมศึกษาปีที่ 6 | แผนการเรียนวิทย์-คณิต</p>
+    <p>เป้าหมาย: คณะวิศวกรรมศาสตร์</p>
+</header>
+
+<section>
+    <div class="about">
+        <h2>เกี่ยวกับฉัน</h2>
+        <p>
+            ข้าพเจ้าเป็นนักเรียนที่มีความสนใจด้านเทคโนโลยีและการแก้ปัญหา
+            มีความตั้งใจศึกษาต่อในระดับอุดมศึกษาเพื่อนำความรู้ไปพัฒนาสังคม
+        </p>
+    </div>
+
+    <div class="education">
+        <h2> ชั้นม.6</h2>
+        <p>โรงเรียนบุญวาทย์วิทยาลัย</p>
+        <p>แผนการเรียน: วิทยาศาสตร์ – คณิตศาสตร์</p>
+        <p>เกรดเฉลี่ยสะสม (GPA): 3.20</p>
+    </div>
+
+    <div class="skills">
+        <h2>ทักษะ</h2>
+        <ul>
+            <li>การเขียนโปรแกรมพื้นฐาน (HTML, Python)</li>
+            <li>การคิดวิเคราะห์และแก้ปัญหา</li>
+            <li>การทำงานเป็นทีม</li>
+            <li>การนำเสนอผลงาน</li>
+        </ul>
+    </div>
+
+    <div class="activities">
+        <h2>กิจกรรมและผลงาน</h2>
+        <ul>
+            <li>ค่ายอบรมเขียนโปรแกรม</li>
+            <li>แข่งขันตอบปัญหาวิชาการ</li>
+            <li>จิตอาสาพัฒนาชุมชน</li>
+            <li>โครงงานวิทยาศาสตร์ระดับโรงเรียน</li>
+        </ul>
+    </div>
+
+    <div class="contact">
+        <h2>ช่องทางติดต่อ</h2>
+        <p>Email: student@email.com</p>
+        <p>โทร: 08X-XXX-XXXX</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Portfolio นักเรียนมัธยมปลาย</p>
+</footer>
+
+</body>
+</html>
